@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-void fillSandpile(int rows, int cols, int sandpile[][cols], int grains) {
+void fill_sandpile(int rows, int cols, int sandpile[][cols], int grains) {
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
 			sandpile[i][j] = grains;
@@ -10,17 +10,20 @@ void fillSandpile(int rows, int cols, int sandpile[][cols], int grains) {
 	}
 }
 
-void printSandpile(int rows, int cols, int sandpile[][cols]) {
+void print_sandpile(int rows, int cols, int sandpile[][cols]) {
+	char symbols[] = " .*#456789000000000000000000";
 	for (int i = 0; i < rows; i++) {
-		printf("%d", sandpile[i][0]);
+		//printf("%d", sandpile[i][0]);
+		printf("%c%c", symbols[sandpile[i][0]],symbols[sandpile[i][0]]);
 		for (int j = 1; j < cols; j++) {
-			printf(",%d", sandpile[i][j]);
+			//printf(",%d", sandpile[i][j]);
+			printf("%c%c", symbols[sandpile[i][j]],symbols[sandpile[i][j]]);
 		}
 		printf("\n");
 	}
 }
 
-bool updateSandpile(int rows, int cols, int sandpile[][cols]) {
+bool update_sandpile(int rows, int cols, int sandpile[][cols]) {
 	bool unstable = false;
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
@@ -37,11 +40,21 @@ bool updateSandpile(int rows, int cols, int sandpile[][cols]) {
 	return unstable;
 }
 
+void get_identity(int rows, int cols, int sandpile[rows][cols]) {
+	fill_sandpile(rows, cols, sandpile, 6);
+	while (update_sandpile(rows, cols, sandpile));
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			sandpile[i][j] = 6 - sandpile[i][j];
+		}
+	}
+	while (update_sandpile(rows, cols, sandpile));
+}
+
 int main(int argc, char *argv[]) {
-	int rows = atoi(argv[1]), cols = atoi(argv[2]), grains = atoi(argv[3]);
+	int rows = atoi(argv[1]), cols = atoi(argv[2]);
 	int sandpile[rows][cols];
-	fillSandpile(rows, cols, sandpile, grains);
-	while (updateSandpile(rows, cols, sandpile));
-	printSandpile(rows, cols, sandpile);
+	get_identity(rows, cols, sandpile);
+	print_sandpile(rows, cols, sandpile);
 	return 0;
 }
