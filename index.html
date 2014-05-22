@@ -22,7 +22,7 @@
     //ctx.mozImageSmoothingEnabled = false;
     s.fill(6);
     var refresh = setInterval(function() {
-        var scalar = Math.floor(255 / 4);
+        var scalar = Math.floor(255 / 6);
         for (var r=0; r<height; r++) {
           for (var c=0; c<width; c++) {
             var i = 4 * (r * width + c);
@@ -36,7 +36,11 @@
     }, 30);
     var update = setInterval(function() {
         var start = new Date().getTime();
-        while (new Date().getTime() - start < 20) s.update();
+        var i =0;
+        while (new Date().getTime() - start < 30) {
+          s.update();
+          i++;
+        }
     }, 0);
 
   </script>

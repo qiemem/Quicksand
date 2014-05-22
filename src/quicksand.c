@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 void fill_sandpile(int rows, int cols, int sandpile[][cols], int grains) {
 	for (int i = 0; i < rows; i++) {
@@ -24,10 +25,12 @@ void print_sandpile(int rows, int cols, int sandpile[][cols]) {
 }
 
 bool update_sandpile(int rows, int cols, int sandpile[][cols]) {
+	int last_state[rows][cols];
+	memcpy(last_state, sandpile, rows*cols*sizeof(int));
 	bool unstable = false;
 	for (int i = 0; i < rows; i++) {
 		for (int j = 0; j < cols; j++) {
-			if (sandpile[i][j] > 3) {
+			if (last_state[i][j] > 3) {
 				sandpile[i][j] -= 4;
 				if (i > 0) sandpile[i-1][j]++;
 				if (i < (rows-1)) sandpile[i+1][j]++;
