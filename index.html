@@ -2,8 +2,42 @@
   <head>
     <title>Quicksand</title>
   </head>
-  <body>
+  <body style="margin: 0px">
+    <canvas style="width: 100%; height: 100%">
+    </canvas>
   </body>
   <script src="lib/quicksand.js"></script>
   <script src="lib/quicksandwrap.js"></script>
+  <script>
+    var width     = Math.floor(window.innerWidth/1),
+        height    = Math.floor(window.innerHeight/1),
+        s         = new Sandpile(height, width),
+        canvas    = document.querySelector('canvas'),
+        ctx       = canvas.getContext('2d'),
+        imageData = ctx.getImageData(0, 0, width, height),
+        data      = imageData.data;
+    canvas.width = width;
+    canvas.height = height;
+    //ctx.imageSmoothingEnabled = false;
+    //ctx.mozImageSmoothingEnabled = false;
+    s.fill(6);
+    var refresh = setInterval(function() {
+        var scalar = Math.floor(255 / 4);
+        for (var r=0; r<height; r++) {
+          for (var c=0; c<width; c++) {
+            var i = 4 * (r * width + c);
+            data[i+0] = scalar * s.get(r,c) | 0;
+            data[i+1] = scalar * s.get(r,c) | 0;
+            data[i+2] = scalar * s.get(r,c) | 0;
+            data[i+3] = 255 | 0;
+          }
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }, 30);
+    var update = setInterval(function() {
+        var start = new Date().getTime();
+        while (new Date().getTime() - start < 20) s.update();
+    }, 0);
+
+  </script>
 </html>
